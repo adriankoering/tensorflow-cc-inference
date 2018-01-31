@@ -119,7 +119,7 @@ include_directories(
 
 ## Declare a C++ library
 add_library(${PROJECT_NAME}
-  src/tensorflow-cc-inference.cc
+  lib/tensorflow-cc-inference.cc
   include/${PROJECT_NAME}/tensorflow-cc-inference.h
 )
 
