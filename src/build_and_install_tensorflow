@@ -1,0 +1,13 @@
+# clone tensorflow repository
+git clone https://github.com/tensorflow/tensorflow
+
+# build c-api with acceleration using bazel
+(cd tensorflow; ./configure; bazel build -c opt --copt=-mavx --copt=-msse4.1 --copt=-msse4.2 //tensorflow:libtensorflow.so)
+
+# install tensorflow c-api to usr/local/lib and include
+sudo cp tensorflow/bazel-bin/tensorflow/libtensorflow.so /usr/local/lib/libtensorflow.so
+sudo mkdir /usr/local/include/tensorflow
+sudo mkdir /usr/local/include/tensorflow/c
+sudo cp tensorflow/tensorflow/c/c_api.h /usr/local/include/tensorflow/c/c_api.h
+export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/lib
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
