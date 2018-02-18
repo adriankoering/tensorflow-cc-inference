@@ -3,9 +3,10 @@
 #include <string>
 #include "tensorflow/c/c_api.h"
 
-namespace tensorflow_cc_inference{
+namespace tensorflow_inference
+{
 
-class TensorflowCCInference {
+class TensorflowInference {
 
 private:
 	TF_Graph*   graph;
@@ -43,14 +44,14 @@ public:
 	 * output_node_name: the node from which the output tensor should be
 	 *   retrieved
 	 */
-	TensorflowCCInference(const std::string&,
+	TensorflowInference(const std::string&,
 												const std::string&,
 												const std::string&);
 
 	/**
 	 * Clean up all pointer-members using the dedicated tensorflor api functions
 	 */
-	~TensorflowCCInference();
+	~TensorflowInference();
 
 	/**
 	 * Run the graph on some input data.

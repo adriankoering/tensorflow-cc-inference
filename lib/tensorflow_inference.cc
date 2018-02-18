@@ -2,9 +2,9 @@
 #include <sstream>
 #include <exception>
 
-#include "tensorflow-cc-inference/tensorflow-cc-inference.h"
+#include "tensorflow_inference/tensorflow_inference.h"
 
-using namespace tensorflow_cc_inference;
+using tensorflow_inference::TensorflowInference;
 
 /**
  * Read a binary protobuf (.pb) buffer into a TF_Buffer object.
@@ -12,7 +12,7 @@ using namespace tensorflow_cc_inference;
  * Non-binary protobuffers are not supported by the C api.
  * The caller is responsible for freeing the returned TF_Buffer.
  */
-TF_Buffer* TensorflowCCInference::ReadBinaryProto(const std::string& fname) const
+TF_Buffer* TensorflowInference::ReadBinaryProto(const std::string& fname) const
 {
 	std::ostringstream content;
 	std::ifstream in(fname, std::ios::in | std::ios::binary); // | std::ios::binary ?
@@ -37,7 +37,7 @@ TF_Buffer* TensorflowCCInference::ReadBinaryProto(const std::string& fname) cons
  *   exceptional status.
  *
  */
-void TensorflowCCInference::AssertOk(const TF_Status* status) const
+void TensorflowInference::AssertOk(const TF_Status* status) const
 {
 	if(TF_GetCode(status) != TF_OK)
 	{
@@ -51,7 +51,7 @@ void TensorflowCCInference::AssertOk(const TF_Status* status) const
  * recreate the tensorflow graph and
  * provide it for inference.
  */
-TensorflowCCInference::TensorflowCCInference(
+TensorflowInference::TensorflowInference(
 		const std::string& binary_graphdef_protobuffer_filename,
 		const std::string& input_node_name,
  	  const std::string& output_node_name)
@@ -89,7 +89,7 @@ TensorflowCCInference::TensorflowCCInference(
 	TF_DeleteStatus(status);
 }
 
-TensorflowCCInference::~TensorflowCCInference()
+TensorflowInference::~TensorflowInference()
 {
 	TF_Status* status = TF_NewStatus();
   // Clean up all the members
@@ -101,7 +101,7 @@ TensorflowCCInference::~TensorflowCCInference()
 	// input_op & output_op are delete by deleting the graph
 }
 
-TF_Tensor* TensorflowCCInference::operator()(TF_Tensor* input_tensor) const
+TF_Tensor* TensorflowInference::operator()(TF_Tensor* input_tensor) const
 {
 	TF_Status* status = TF_NewStatus();
 	TF_Tensor* output_tensor;
