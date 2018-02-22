@@ -20,13 +20,14 @@ target_link_libraries(${PROJECT_NAME}
 
 
 # Test
-find_package(GTest REQUIRED)
-include_directories(${GTEST_INCLUDE_DIRS})
+include(gtest.cmake)
+
+find_package(Threads)
 
 add_executable(testrunner test/test_tensorflow_cc_inference.cc)
 target_link_libraries(testrunner
-  ${GTEST_LIBRARIES}
-  pthread
+  gtest
+  ${CMAKE_THREAD_LIBS_INIT}
   tensorflow
   tensorflow_inference
 )
