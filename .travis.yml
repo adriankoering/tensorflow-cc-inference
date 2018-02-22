@@ -1,8 +1,9 @@
 dist: xenial
-sudo: false
+sudo: required
 language: cpp
 
 script:
   - bash travis/install.sh
   - mkdir build && cd build
   - cmake --build .
+  - ./testrunner
