@@ -5,5 +5,5 @@ language: cpp
 script:
   - bash travis/install.sh
   - mkdir build
-  - cd build && cmake .. && make
+  - cd build && cmake .. && make && cd ..
   - build/testrunner
