@@ -8,7 +8,7 @@ include_directories(
 )
 
 ## Declare a library
-add_library(${PROJECT_NAME}
+add_library(${PROJECT_NAME} SHARED
   lib/${PROJECT_NAME}.cc
   include/${PROJECT_NAME}/${PROJECT_NAME}.h
 )
@@ -18,10 +18,15 @@ target_link_libraries(${PROJECT_NAME}
   tensorflow
 )
 
-## Testing
 
-## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_tensorflow-cc-inference.cpp)
-# if(TARGET ${PROJECT_NAME}-test)
-#   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
-# endif()
+# Test
+find_package(GTest REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
+
+add_executable(testrunner test/test_tensorflow_cc_inference.cc)
+target_link_libraries(testrunner
+  ${GTEST_LIBRARIES}
+  pthread
+  tensorflow
+  tensorflow_inference
+)
