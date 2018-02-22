@@ -1,0 +1,8 @@
+dist: xenial
+sudo: false
+language: cpp
+
+script:
+  - bash travis/install.sh
+  - mkdir build && cd build
+  - cmake --build .
