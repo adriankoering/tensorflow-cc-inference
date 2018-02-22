@@ -1,8 +1,6 @@
-mkdir -p libtensorflow
-
 TF_TYPE="cpu"
 OS="linux"
-TARGET_DIRECTORY=$PWD"/libtensorflow"
+TARGET_DIRECTORY="/usr/local/"
 
 curl -L "https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-${TF_TYPE}-${OS}-x86_64-1.5.0.tar.gz" | tar -C $TARGET_DIRECTORY -xz
 
