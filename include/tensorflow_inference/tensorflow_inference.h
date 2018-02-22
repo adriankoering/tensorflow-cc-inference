@@ -44,9 +44,9 @@ public:
 	 * output_node_name: the node from which the output tensor should be
 	 *   retrieved
 	 */
-	TensorflowInference(const std::string&,
-												const std::string&,
-												const std::string&);
+	TensorflowInference(const std::string& binary_graphdef_protobuf_filename,
+											const std::string& input_node_name,
+											const std::string& output_node_name);
 
 	/**
 	 * Clean up all pointer-members using the dedicated tensorflor api functions
