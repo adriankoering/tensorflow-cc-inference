@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(tensorflow_inference)
+project(tensorflow_cc_inference)
 
 ## Options
 add_compile_options(-std=c++11 -Wall -O3)
@@ -22,7 +22,7 @@ target_link_libraries(${PROJECT_NAME}
 ## Examples
 add_executable(multiply_with_two example/multiply_with_two.cc)
 target_link_libraries( multiply_with_two
-  tensorflow_inference
+  ${PROJECT_NAME}
 )
 
 ## Test
@@ -33,6 +33,5 @@ add_executable(testrunner test/test_tensorflow_cc_inference.cc)
 target_link_libraries(testrunner
   gtest
   ${CMAKE_THREAD_LIBS_INIT}
-  tensorflow
-  tensorflow_inference
+  ${PROJECT_NAME}
 )

@@ -2,9 +2,9 @@
 #include <sstream>
 #include <exception>
 
-#include "tensorflow_inference/Inference.h"
+#include "tensorflow_cc_inference/Inference.h"
 
-using tensorflow_inference::Inference;
+using tensorflow_cc_inference::Inference;
 
 /**
  * Read a binary protobuf (.pb) buffer into a TF_Buffer object.

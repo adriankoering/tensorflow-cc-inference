@@ -1,8 +1,8 @@
 
-#include "tensorflow_inference/Inference.h"
+#include "tensorflow_cc_inference/Inference.h"
 #include <gtest/gtest.h>
 #include <string>
-using tensorflow_inference::Inference;
+using tensorflow_cc_inference::Inference;
 
 TEST(TestSimplegraph, DoesItRun) {
 

@@ -1,9 +1,9 @@
 #include <iostream>
 
 #include <tensorflow/c/c_api.h>
-#include <tensorflow_inference/Inference.h>
+#include <tensorflow_cc_inference/Inference.h>
 
-using tensorflow_inference::Inference;
+using tensorflow_cc_inference::Inference;
 
 int main(int argc, char** argv) {
 

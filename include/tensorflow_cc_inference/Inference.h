@@ -3,7 +3,7 @@
 #include <string>
 #include "tensorflow/c/c_api.h"
 
-namespace tensorflow_inference
+namespace tensorflow_cc_inference
 {
 
 class Inference {
