@@ -1,5 +1,9 @@
 # Tensorflow CC Inference
 
+![License:MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)
+[![Build Status](https://travis-ci.org/adriankoering/tensorflow-cc-inference.svg?branch=master)](https://travis-ci.org/adriankoering/tensorflow-cc-inference)
+[![Documentation Status](https://readthedocs.org/projects/tensorflow-cc-inference/badge/?version=latest)](http://tensorflow-cc-inference.readthedocs.io/en/latest/?badge=latest)
+
 For the moment Tensorflow only provides a C-API that is easy to deploy and can be installed from pre-build binaries. This library aims to take away a lot of the overhead inflicted by the C-API and provide an easier-to-use interface that allows to execute trained tensorflow neural networks from C++.
 
 It still is a little involved to produce a neural-network graph in the suitable format and to work with Tensorflow's C-API version of tensors. [This](https://medium.com/jim-fleming/loading-a-tensorflow-graph-with-the-c-api-4caaff88463f) great post by Jim Fleming might help to get started exporting the graph-definition into a binary-Protobuf format.
