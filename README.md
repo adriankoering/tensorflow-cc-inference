@@ -25,6 +25,22 @@ For a more detailed example on how to perform inference in C++ and information o
 This library depends on tensorflow and its C-API. Installation is straightforward following the official documentation: [Tensorflow Install C](https://tensorflow.org/install/install_c)
 
 
+## Build
+
+To compile this library start with cloning the sources and creating a build directory in the repository root.
+
+1. git clone git@github.com:adriankoering/tensorflow-cc-inference.git
+2. cd tensorflow-cc-inference && mkdir build && cd build
+
+    Then compile it via
+3. cmake .. && make
+
+     and optionally run the example:
+4. ./multiply_with_two
+
+
+
+
 ## Glossary
 
 
