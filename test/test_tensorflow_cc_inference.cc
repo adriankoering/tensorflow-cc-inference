@@ -1,12 +1,12 @@
 
-#include "tensorflow_inference/tensorflow_inference.h"
+#include "tensorflow_inference/Inference.h"
 #include <gtest/gtest.h>
 #include <string>
-using tensorflow_inference::TensorflowInference;
+using tensorflow_inference::Inference;
 
 TEST(TestSimplegraph, DoesItRun) {
 
-  auto M = TensorflowInference("test/graphs/x_times_2.pb", "x", "y");
+  auto M = Inference("test/graphs/x_times_two.pb", "x", "y");
 
   int64_t dims[1] = {1l, };
   TF_Tensor* input_tensor = TF_AllocateTensor(TF_FLOAT,

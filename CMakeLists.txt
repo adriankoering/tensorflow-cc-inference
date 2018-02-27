@@ -9,8 +9,8 @@ include_directories(
 
 ## Declare a library
 add_library(${PROJECT_NAME} SHARED
-  lib/${PROJECT_NAME}.cc
-  include/${PROJECT_NAME}/${PROJECT_NAME}.h
+  lib/Inference.cc
+  include/${PROJECT_NAME}/Inference.h
 )
 
 ## Link library against dependencies
@@ -19,9 +19,14 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 
-# Test
-include(gtest.cmake)
+## Examples
+add_executable(multiply_with_two example/multiply_with_two.cc)
+target_link_libraries( multiply_with_two
+  tensorflow_inference
+)
 
+## Test
+include(gtest.cmake)
 find_package(Threads)
 
 add_executable(testrunner test/test_tensorflow_cc_inference.cc)

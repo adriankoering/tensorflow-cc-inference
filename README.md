@@ -8,13 +8,13 @@ It still is a little involved to produce a neural-network graph in the suitable 
 
 ``` C++
 #include <tensorflow/c/c_api.h>
-#include "tensorflow_inference/Inference.h"
+#include "tensorflow_inference/tensorflow_inference.h"
 using tensorflow_inference::Inference;
 
 auto CNN = Inference("path/to/graph", "input_node_name", "output_node_name");
 
 TF_Tensor* in  = TF_AllocateTensor(/*Allocate and fill tensor*/);
-TF_Tensor* out = CNN.infere(in);
+TF_Tensor* out = CNN(in);
 
 float* data = static_cast<float*>(TF_TensorData(out));
 ```
