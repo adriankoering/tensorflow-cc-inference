@@ -1,0 +1,4 @@
+site_name: Tensorflow CC Inference
+pages:
+  - 'index.md'
+theme: readthedocs
