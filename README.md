@@ -2,7 +2,7 @@
 
 For the moment Tensorflow only provides a C-API that is easy to deploy and can be installed from pre-build binaries. This library aims to take away a lot of the overhead inflicted by the C-API and provide an easier-to-use interface that allows to execute trained tensorflow neural networks from C++.
 
-It still is a little involved to produce a neural-network graph in the suitable format and to work with Tensorflow's C-API version of tensors. [This](https://medium.com/jim-fleming/loading-a-tensorflow-graph-with-the-c-api-4caaff88463f) great post by Jim Fleming might help to get started exporting the graph-definition into a binary-Protobuf format. Additionally the example directory contains a Python script that goes through the necessary steps.
+It still is a little involved to produce a neural-network graph in the suitable format and to work with Tensorflow's C-API version of tensors. [This](https://medium.com/jim-fleming/loading-a-tensorflow-graph-with-the-c-api-4caaff88463f) great post by Jim Fleming might help to get started exporting the graph-definition into a binary-Protobuf format.
 
 ## Usage
 
@@ -18,6 +18,7 @@ TF_Tensor* out = CNN(in);
 
 float* data = static_cast<float*>(TF_TensorData(out));
 ```
+For a more detailed example on how to perform inference in C++ and information on how to export graphs from Python please check out the example directory.
 
 ## Installation
 
