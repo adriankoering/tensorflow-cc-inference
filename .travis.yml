@@ -6,4 +6,4 @@ script:
   - bash travis/install.sh
   - mkdir build
   - cd build && cmake .. && make && cd ..
-  - bash travis/test.sh
+  - build/testrunner
