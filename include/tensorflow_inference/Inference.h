@@ -6,7 +6,7 @@
 namespace tensorflow_inference
 {
 
-class TensorflowInference {
+class Inference {
 
 private:
 	TF_Graph*   graph;
@@ -44,14 +44,14 @@ public:
 	 * output_node_name: the node from which the output tensor should be
 	 *   retrieved
 	 */
-	TensorflowInference(const std::string& binary_graphdef_protobuf_filename,
-											const std::string& input_node_name,
-											const std::string& output_node_name);
+	Inference(const std::string& binary_graphdef_protobuf_filename,
+						const std::string& input_node_name,
+						const std::string& output_node_name);
 
 	/**
 	 * Clean up all pointer-members using the dedicated tensorflor api functions
 	 */
-	~TensorflowInference();
+	~Inference();
 
 	/**
 	 * Run the graph on some input data.

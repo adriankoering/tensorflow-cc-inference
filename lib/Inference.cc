@@ -2,9 +2,9 @@
 #include <sstream>
 #include <exception>
 
-#include "tensorflow_inference/tensorflow_inference.h"
+#include "tensorflow_inference/Inference.h"
 
-using tensorflow_inference::TensorflowInference;
+using tensorflow_inference::Inference;
 
 /**
  * Read a binary protobuf (.pb) buffer into a TF_Buffer object.
@@ -12,7 +12,7 @@ using tensorflow_inference::TensorflowInference;
  * Non-binary protobuffers are not supported by the C api.
  * The caller is responsible for freeing the returned TF_Buffer.
  */
-TF_Buffer* TensorflowInference::ReadBinaryProto(const std::string& fname) const
+TF_Buffer* Inference::ReadBinaryProto(const std::string& fname) const
 {
 	std::ostringstream content;
 	std::ifstream in(fname, std::ios::in | std::ios::binary); // | std::ios::binary ?
@@ -37,7 +37,7 @@ TF_Buffer* TensorflowInference::ReadBinaryProto(const std::string& fname) const
  *   exceptional status.
  *
  */
-void TensorflowInference::AssertOk(const TF_Status* status) const
+void Inference::AssertOk(const TF_Status* status) const
 {
 	if(TF_GetCode(status) != TF_OK)
 	{
@@ -51,7 +51,7 @@ void TensorflowInference::AssertOk(const TF_Status* status) const
  * recreate the tensorflow graph and
  * provide it for inference.
  */
-TensorflowInference::TensorflowInference(
+Inference::Inference(
 		const std::string& binary_graphdef_protobuffer_filename,
 		const std::string& input_node_name,
  	  const std::string& output_node_name)
@@ -89,7 +89,7 @@ TensorflowInference::TensorflowInference(
 	TF_DeleteStatus(status);
 }
 
-TensorflowInference::~TensorflowInference()
+Inference::~Inference()
 {
 	TF_Status* status = TF_NewStatus();
   // Clean up all the members
@@ -101,7 +101,7 @@ TensorflowInference::~TensorflowInference()
 	// input_op & output_op are delete by deleting the graph
 }
 
-TF_Tensor* TensorflowInference::operator()(TF_Tensor* input_tensor) const
+TF_Tensor* Inference::operator()(TF_Tensor* input_tensor) const
 {
 	TF_Status* status = TF_NewStatus();
 	TF_Tensor* output_tensor;
