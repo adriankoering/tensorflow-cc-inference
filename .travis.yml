@@ -3,7 +3,7 @@ sudo: true
 language: cpp
 
 script:
-  - bash travis/install.sh
+  - bash travis/install_tensorflow.sh
   - mkdir build
   - cd build && cmake .. && make && cd ..
   - build/testrunner
