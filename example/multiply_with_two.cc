@@ -22,7 +22,8 @@ int main(int argc, char** argv) {
   // get and display the data from the output tensor
   float* out_data = (float*)(TF_TensorData(out));
   std::cout << "3.14 * 2 = " << out_data[0] << std::endl;
-
+  TF_DeleteTensor(in);
+  TF_DeleteTensor(out);
 }
 
 // To compile and run this file:
