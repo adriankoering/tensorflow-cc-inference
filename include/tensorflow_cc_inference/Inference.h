@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 #include "tensorflow/c/c_api.h"
 
 namespace tensorflow_cc_inference
@@ -17,7 +18,9 @@ class Tensor
 {
 private:
 	static void StubDeallocator(void* /*data*/, size_t /*len*/, void* /*arg*/) {}
+	static void TensorDeleter(TF_Tensor* tensor) { TF_DeleteTensor(tensor);	}
 
+	Tensor() {}
 	inline TF_DataType TFDataType();
 	size_t CalcDataLen(const int64_t* dims, int num_dims)
 	{
@@ -27,7 +30,7 @@ private:
 		return len;
 	}
 
-	TF_Tensor* tensor;
+	std::shared_ptr<TF_Tensor> tensor;
 public:
 	// Creates Tensor that holds previously created TF_Tensor and deletes it in destructor
 	Tensor(TF_Tensor* atensor)
@@ -35,14 +38,14 @@ public:
 		if (TFDataType() != TF_TensorType(atensor))
 			throw std::runtime_error("Inconsistent TF_Tensor* and Tensor<T> data types: " +
 									std::to_string(TFDataType()) + " vs. " + std::to_string(TF_TensorType(atensor)));
-		tensor = atensor;
+		tensor.reset(atensor, TensorDeleter);
 	}
 
 	// Creates tensor that holds data in it's own memory
 	// Data should be filled using pointer returned by Data()
 	Tensor(const int64_t* dims, int num_dims)
 	{
-		tensor = TF_AllocateTensor(TFDataType(), dims, num_dims, CalcDataLen(dims, num_dims));
+		tensor.reset(TF_AllocateTensor(TFDataType(), dims, num_dims, CalcDataLen(dims, num_dims)), TensorDeleter);
 	}
 
 	// Creates tensor that holds external data pointed by data[0,len-1].
@@ -53,28 +56,18 @@ public:
 		void* deallocator_arg)
 	{
 		auto deallocator = adeallocator ? adeallocator : &StubDeallocator;
-		tensor = TF_NewTensor(TFDataType(), dims, num_dims, data, CalcDataLen(dims, num_dims),
-			deallocator, deallocator_arg);
+		tensor.reset(TF_NewTensor(TFDataType(), dims, num_dims, data, CalcDataLen(dims, num_dims),
+			deallocator, deallocator_arg), TensorDeleter);
 	}
 
-	/**
-	* Clean up all pointer-members using the dedicated tensorflor api functions
-	*/
-	~Tensor()
-	{
-		if (tensor)
-			TF_DeleteTensor(tensor);
-		tensor = nullptr;
-	}
-
-	TF_Tensor* TFTensor() { return tensor; }
-	T* Data() { return (T*)(TF_TensorData(tensor)); }
+	TF_Tensor* TFTensor() { return tensor.get(); }
+	T* Data() { return (T*)(TF_TensorData(tensor.get())); }
 	std::vector<int64_t> Shape()
 	{
-		int ndims = TF_NumDims(tensor);
+		int ndims = TF_NumDims(tensor.get());
 		std::vector<int64_t> shape;
 		for (int i = 0; i < ndims; ++i)
-			shape.push_back(TF_Dim(tensor, i));
+			shape.push_back(TF_Dim(tensor.get(), i));
 		return shape;
 	}
 };

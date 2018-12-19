@@ -44,7 +44,7 @@ int main(int /*argc*/, char** /*argv*/) {
 	  auto in = Tensor<float>(dims2, 3);
 	  for(int j = 0; j < 8; j++)
 		in.Data()[j] = 3.14f+j;
-	  auto out = CNN(in);
+	  auto out = CNN.Run<float>(in);
 	  for (int j = 0; j < 8; j++)
 		  std::cout << "(3.14+i) * 2 = " << out.Data()[j] << std::endl;
   }
@@ -58,7 +58,7 @@ int main(int /*argc*/, char** /*argv*/) {
   {
 	  float pi_data[] = {3.14f,13.14f,23.14f,33.14f,43.14f,53.14f,63.14f,73.14f};
 	  auto in = Tensor<float>(dims2, 3, pi_data, NULL /* or &TestDeallocator */, NULL);
-	  auto out = CNN(in);
+	  auto out = CNN.Run<float>(in);
 	  for (int j = 0; j < 8; j++)
 		  std::cout << "(3.14+10*i) * 2 = " << out.Data()[j] << std::endl;
   }
@@ -74,7 +74,7 @@ int main(int /*argc*/, char** /*argv*/) {
   {
 	  uint8_t pi_data[] = {3,4,5,6,7,8};
 	  auto in = Tensor<uint8_t>(dims3, 2, pi_data, NULL /* or &TestDeallocator */, NULL);
-	  auto out = CNN_uint8(in);
+	  auto out = CNN_uint8.Run<uint8_t>(in);
 	  for (int j = 0; j < 6; j++)
 		  std::cout << "(3+i) * 2 = " << (int)(out.Data()[j]) << std::endl;
   }
