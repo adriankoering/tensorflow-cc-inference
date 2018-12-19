@@ -1,10 +1,87 @@
 #pragma once
 
 #include <string>
+#include <vector>
+#include <memory>
 #include "tensorflow/c/c_api.h"
 
 namespace tensorflow_cc_inference
 {
+
+/**
+* Class providing type-specific access to TF_Tensor
+* and auto deleting TF_Tensor in destructor
+*/
+
+template<typename T>
+class Tensor
+{
+private:
+	static void StubDeallocator(void* /*data*/, size_t /*len*/, void* /*arg*/) {}
+	static void TensorDeleter(TF_Tensor* tensor) { TF_DeleteTensor(tensor);	}
+
+	Tensor() {}
+	inline TF_DataType TFDataType();
+	size_t CalcDataLen(const int64_t* dims, int num_dims)
+	{
+		size_t len = sizeof(T);
+		for (int i = 0; i < num_dims; ++i)
+			len *= dims[i];
+		return len;
+	}
+
+	std::shared_ptr<TF_Tensor> tensor;
+public:
+	// Creates Tensor that holds previously created TF_Tensor and deletes it in destructor
+	Tensor(TF_Tensor* atensor)
+	{
+		if (TFDataType() != TF_TensorType(atensor))
+			throw std::runtime_error("Inconsistent TF_Tensor* and Tensor<T> data types: " +
+									std::to_string(TFDataType()) + " vs. " + std::to_string(TF_TensorType(atensor)));
+		tensor.reset(atensor, TensorDeleter);
+	}
+
+	// Creates tensor that holds data in it's own memory
+	// Data should be filled using pointer returned by Data()
+	Tensor(const int64_t* dims, int num_dims)
+	{
+		tensor.reset(TF_AllocateTensor(TFDataType(), dims, num_dims, CalcDataLen(dims, num_dims)), TensorDeleter);
+	}
+
+	// Creates tensor that holds external data pointed by data[0,len-1].
+	// If deallocator is passed, it will be called when tensor is deallocated to 
+	// deallocate underlying data.
+	Tensor(const int64_t* dims, int num_dims, T* data,
+		void(*adeallocator)(void* data, size_t len, void* arg),
+		void* deallocator_arg)
+	{
+		auto deallocator = adeallocator ? adeallocator : &StubDeallocator;
+		tensor.reset(TF_NewTensor(TFDataType(), dims, num_dims, data, CalcDataLen(dims, num_dims),
+			deallocator, deallocator_arg), TensorDeleter);
+	}
+
+	TF_Tensor* TFTensor() { return tensor.get(); }
+	T* Data() { return (T*)(TF_TensorData(tensor.get())); }
+	std::vector<int64_t> Shape()
+	{
+		int ndims = TF_NumDims(tensor.get());
+		std::vector<int64_t> shape;
+		for (int i = 0; i < ndims; ++i)
+			shape.push_back(TF_Dim(tensor.get(), i));
+		return shape;
+	}
+};
+
+template<> TF_DataType Tensor<float>::TFDataType() { return TF_FLOAT; }
+template<> TF_DataType Tensor<double>::TFDataType() { return TF_DOUBLE; }
+template<> TF_DataType Tensor<int32_t>::TFDataType() { return TF_INT32; }
+template<> TF_DataType Tensor<uint8_t>::TFDataType() { return TF_UINT8; }
+template<> TF_DataType Tensor<int16_t>::TFDataType() { return TF_INT16; }
+template<> TF_DataType Tensor<int8_t>::TFDataType() { return TF_INT8; }
+template<> TF_DataType Tensor<int64_t>::TFDataType() { return TF_INT64; }
+template<> TF_DataType Tensor<uint64_t>::TFDataType() { return TF_UINT64; }
+// TODO add other types when required
+
 
 class Inference {
 
@@ -60,6 +137,11 @@ public:
 	 */
 	 TF_Tensor* operator()(TF_Tensor* input_tensor) const;
 
+	 template<typename OutputType, typename InputType>
+	 Tensor<OutputType> Run(Tensor<InputType>& input_tensor) const
+	 {
+		 return Tensor<OutputType>((*this)(input_tensor.TFTensor()));
+	 }
 };
 
 } // namespace tensorflow_cc_inference
